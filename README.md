@@ -1,17 +1,31 @@
-# arkanoid
+Арканоид (тема 23)
 
-A new Flutter project.
+Мобильная игра на Flutter: Арканоид и Fuseball, кирпичи с бронёй, бонусы, достижения и раздел Extra.
 
-## Getting Started
+Возможности
+Главный экран: рекорды, «Играть в Арканоид», «Играть в Fuseball», «Достижения», «Выход».
+Арканоид: 3 жизни, процедурные уровни, кирпичи на 1, 2 и 3 удара.
+Бонусы (шанс 20 %): широкая платформа, три мяча, ускорение мяча (×1,5, 8 с).
+Fuseball: мяч с гравитацией, нужно попадать в единственный кирпич.
+8 достижений, например «Разбить 100 блоков», «Пройти уровень без потери жизней», «Поймать 3 мяча одновременно».
+Extra (после всех достижений): «Бесконечные мячи» (до 100, из каждого кирпича падает ×3) и «Двойная скорость». Рекорды и достижения в Extra не засчитываются.
+Управление: перетаскивание пальцем в любом месте экрана, касание запускает мяч.
+Рекорды и прогресс сохраняются локально, интернет и разрешения не нужны.
+Запуск
 
-This project is a starting point for a Flutter application.
+bash
+flutter create --project-name arkanoid_game --platforms=android,ios .
+flutter pub get
+flutter analyze
+flutter test
+flutter run
 
-A few resources to get you started if this is your first Flutter project:
+Если flutter create спросит про перезапись pubspec.yaml, оставьте текущий файл.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Структура
+lib/
+  core/          размеры игрового мира, тема
+  data/          хранилище (shared_preferences), репозиторий
+  domain/        модели, движки игр на чистом Dart, достижения, режимы Extra
+  presentation/  состояние приложения, экраны, отрисовка
+test/            модульные и виджет-тесты (48)
