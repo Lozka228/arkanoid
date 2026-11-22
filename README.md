@@ -13,19 +13,20 @@ Extra (после всех достижений): «Бесконечные мя�
 Рекорды и прогресс сохраняются локально, интернет и разрешения не нужны.
 Запуск
 
-bash
+'''bash
 flutter create --project-name arkanoid_game --platforms=android,ios .
 flutter pub get
 flutter analyze
 flutter test
 flutter run
-
+'''
 Если flutter create спросит про перезапись pubspec.yaml, оставьте текущий файл.
 
-Структура
+'''Структура
 lib/
   core/          размеры игрового мира, тема
   data/          хранилище (shared_preferences), репозиторий
   domain/        модели, движки игр на чистом Dart, достижения, режимы Extra
   presentation/  состояние приложения, экраны, отрисовка
 test/            модульные и виджет-тесты (48)
+'''
