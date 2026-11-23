@@ -50,7 +50,7 @@ void main() {
   test('бонусы, очки, уровни и Fuseball', () {
     final svc = make(MemoryStorage());
     for (var i = 0; i < 10; i++) {
-      svc.handleArkanoidEvent(const PowerUpCollected(PowerUpType.slow));
+      svc.handleArkanoidEvent(const PowerUpCollected(PowerUpType.fast));
     }
     expect(svc.isUnlocked('bonus10'), isTrue);
     svc.handleArkanoidEvent(const ScoreChanged(999));

@@ -165,7 +165,7 @@ void main() {
       expect(events.whereType<BallCountChanged>().last.count, 3);
       e.applyPowerUp(PowerUpType.multi);
       e.applyPowerUp(PowerUpType.multi);
-      expect(e.balls.length, ArkanoidEngine.maxBalls);
+      expect(e.balls.length, ArkanoidEngine.defaultMaxBalls);
     });
 
     test('«широкая платформа» расширяет и по таймеру возвращается', () {
@@ -180,15 +180,15 @@ void main() {
       expect(e.wideTimer, 0);
     });
 
-    test('«замедление» уменьшает скорость мяча в 0.6 раза', () {
-      final slow = make();
+    test('«ускорение» увеличивает скорость мяча в 1.5 раза', () {
+      final fast = make();
       final normal = make();
-      final bs = setBall(slow, vy: -200);
+      final bf = setBall(fast, vy: -200);
       final bn = setBall(normal, vy: -200);
-      slow.applyPowerUp(PowerUpType.slow);
-      slow.update(0.05);
+      fast.applyPowerUp(PowerUpType.fast);
+      fast.update(0.05);
       normal.update(0.05);
-      expect(400 - bs.y, closeTo(6, 0.01));
+      expect(400 - bf.y, closeTo(15, 0.01));
       expect(400 - bn.y, closeTo(10, 0.01));
     });
 
@@ -200,6 +200,62 @@ void main() {
       e.update(0.02);
       expect(e.powerUps, isEmpty);
       expect(events.whereType<PowerUpCollected>().length, 1);
+    });
+  });
+
+  group('Extra-режимы', () {
+    test('бесконечные мячи: множитель ×3 утраивает все мячи, максимум 100', () {
+      final e = ArkanoidEngine(
+        random: Random(1),
+        maxBalls: 100,
+        forcedDrop: PowerUpType.multi,
+        multiplyAll: true,
+      );
+      setBall(e);
+      e.applyPowerUp(PowerUpType.multi);
+      expect(e.balls.length, 3);
+      e.applyPowerUp(PowerUpType.multi);
+      expect(e.balls.length, 9);
+      for (var i = 0; i < 6; i++) {
+        e.applyPowerUp(PowerUpType.multi);
+      }
+      expect(e.balls.length, 100);
+    });
+
+    test('бесконечные мячи: из каждого кирпича падает ×3', () {
+      final e = ArkanoidEngine(
+        random: Random(1),
+        forcedDrop: PowerUpType.multi,
+        multiplyAll: true,
+      );
+      for (var i = 0; i < 5; i++) {
+        final br = Brick(Rect.fromLTWH(10.0 * i, 50, 8, 8), BrickType.normal);
+        e.bricks.add(br);
+        e.damageBrick(br);
+      }
+      expect(e.powerUps.length, 5);
+      expect(e.powerUps.every((u) => u.type == PowerUpType.multi), isTrue);
+    });
+
+    test('двойная скорость: запуск вдвое быстрее обычного', () {
+      final normal = make()..launch();
+      final dbl = ArkanoidEngine(random: Random(1), speedMultiplier: 2.0)..launch();
+      expect(dbl.balls.single.speed, closeTo(normal.balls.single.speed * 2, 0.01));
+    });
+  });
+
+  group('Управление', () {
+    test('movePaddleBy сдвигает платформу относительно текущего положения', () {
+      final e = make();
+      final x = e.paddleX;
+      e.movePaddleBy(25);
+      expect(e.paddleX, x + 25);
+      e.movePaddleBy(-10);
+      expect(e.paddleX, x + 15);
+    });
+
+    test('платформа расположена выше прежнего положения (520)', () {
+      expect(ArkanoidEngine.paddleY, 520);
     });
   });
 
